@@ -21,13 +21,15 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
   include_recipe "syslog-ng"
 
   application = {
-    :destination_type => params[:destination_type] || "file"
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
+    :destination_host => params[:destination_host]
+    :destination_port => params[:destination_port]
     :host => params[:host] || "127.0.0.1",
     :port => params[:port] || "514",
     :log_base => params[:log_base] || node[:syslog_ng][:log_dir]
+    :log_name => params[:log_name] || "default.log"
   }
 
   directory "#{application[:log_base]}" do

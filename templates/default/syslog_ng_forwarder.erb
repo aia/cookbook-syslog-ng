@@ -9,10 +9,13 @@ source s_udp_<%= @application[:name] %> {
   udp (ip(<%= @application[:host] %>) port(<%= @application[:port] %>));
 };
 
-destination d_file_<%= @application[:name] %> {
-  <%=@application[:destination_type]%>("<%= @application[:log_base] %>/<%= @application[:name] %>/default.log" template(t_network));
+destination d_udp_<%= @application[:name] %> {
+ udp( "<%= @application[:destination_host] %>" port(@application[:destination_port]) );;
 };
 
-log { source(s_udp_<%= @application[:name] %>); filter(f_notdbg); destination(d_file_<%= @application[:name] %>); };
+log {
+  source(s_udp_<%= @application[:name] %>);
+  destination(d_udp_<%= @application[:name] %>);
+};
 
 # do not forget the empty line

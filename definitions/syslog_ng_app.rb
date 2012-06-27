@@ -27,6 +27,7 @@ define :syslog_ng_app, :template => "syslog_ng_app.erb" do
     :host => params[:host] || "127.0.0.1",
     :port => params[:port] || "514",
     :log_base => params[:log_base] || node[:syslog_ng][:log_dir]
+    :log_name => params[:log_name] || "default.log"  
   }
 
   directory "#{application[:log_base]}" do
