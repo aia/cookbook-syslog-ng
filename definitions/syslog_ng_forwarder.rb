@@ -17,10 +17,11 @@
 # limitations under the License.
 #
 
-define :syslog_ng_app, :template => "syslog_ng_app.erb" do
+define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
   include_recipe "syslog-ng"
 
   application = {
+    :destination_type => params[:destination_type] || "file"
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
@@ -62,3 +63,4 @@ define :syslog_ng_app, :template => "syslog_ng_app.erb" do
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
 end
+\
