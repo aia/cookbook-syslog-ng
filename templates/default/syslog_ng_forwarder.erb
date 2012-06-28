@@ -10,7 +10,7 @@ source s_udp_<%= @application[:name] %> {
 };
 
 destination d_<%= @application[:destination_protocol] %>_<%= @application[:name] %> {
- <%= @application[:destination_protocol] %>( "<%= @application[:destination_host] %>" port(@application[:destination_port]) );;
+  <%= @application[:destination_protocol] %>( "<%= @application[:destination_host] %>" port(<%= @application[:destination_port] %>) );
 };
 
 log {
