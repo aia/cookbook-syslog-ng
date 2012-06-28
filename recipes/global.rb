@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe "syslog-ng"
+
 service "syslog" do
   action [ :disable, :stop ]
 end
