@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: syslog-ng
-# Definition:: syslog_ng_app
+# Definition:: syslog_ng_forwarder
 #
 # Copyright 2012, Artem Veremey
 #
