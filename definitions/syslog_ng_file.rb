@@ -24,10 +24,11 @@ define :syslog_ng_file, :template => "syslog_ng_file.erb" do
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
+    :days_uncompressed => params[:days_uncompressed] || 1
     :host => params[:host] || "127.0.0.1",
     :port => params[:port] || "514",
     :log_base => params[:log_base] || node[:syslog_ng][:log_dir]
-    :log_name => params[:log_name] || "default.log"  
+    :log_name => params[:log_name] || "default.log"
   }
 
   directory "#{application[:log_base]}" do
@@ -62,4 +63,13 @@ define :syslog_ng_file, :template => "syslog_ng_file.erb" do
 
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
+  
+  template "/etc/cron.daily/#{application[:name]_compress_logs" do
+    source compress_logs.erb
+    mode 0755
+    owner "root"
+    group "root"
+    variables( :application => application )
+  end
+
 end

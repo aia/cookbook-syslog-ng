@@ -37,6 +37,7 @@ Usage
     
     syslog_ng_file application[:name] do
       index "02"
+      days_uncompressed "7"
       host "127.0.0.1"
       port "514"
       log_base "/var/applogs"
