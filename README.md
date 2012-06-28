@@ -35,7 +35,7 @@ Usage
 ### In a cookbook:
     include_recipe "syslog-ng"
     
-    syslog_ng_file application[:name] do
+    syslog_ng_file "application_foo" do
       index "02"
       days_uncompressed "7"
       host "127.0.0.1"
@@ -44,7 +44,7 @@ Usage
       log_name "default.log"
     end
 
-    syslog_ng_forwarder application[:name] do
+    syslog_ng_forwarder "application_foo" do
       index "03"
       host "127.0.0.1"
       port "514"

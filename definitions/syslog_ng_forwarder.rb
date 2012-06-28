@@ -31,20 +31,6 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
     :port => params[:port] || "514",
   }
 
-  directory "#{application[:log_base]}" do
-    owner node[:syslog_ng][:user]
-    group node[:syslog_ng][:group]
-    mode 00755
-    action :create
-  end
-
-  directory "#{application[:log_base]}/#{application[:name]}" do
-    owner node[:syslog_ng][:user]
-    group node[:syslog_ng][:group]
-    mode 00755
-    action :create
-  end
-
   template "#{node[:syslog_ng][:config_dir]}/conf.d/#{application[:index]}#{application[:name]}" do
     source params[:template]
     owner node[:syslog_ng][:user]
@@ -64,4 +50,3 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
 end
-\
