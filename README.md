@@ -76,6 +76,15 @@ limitations under the License.
 Changes
 =======
 
+### v 1.1.0
+
+* adding a new definition for configuring forwarding
+* renaming the defintion that writes files to make that clearer in the name
+* in the definition for writing files, allow specifying file name
+* in the definition for writing files, compress old log files
+* moving system logging configuration from the default recipe to a new recipe
+
+
 ### v 1.0.0
 
 * Initial public release
