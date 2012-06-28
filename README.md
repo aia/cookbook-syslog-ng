@@ -8,7 +8,7 @@ The Syslog NG cookbook installs and configures syslog-ng service. There are two 
 
 There are also two definitions
 
-* syslog_ng_app configures syslog-ng to listen on a udp port and write logs it receives to a file
+* syslog_ng_file configures syslog-ng to listen on a udp port and write logs it receives to a file
 * syslog_ng_forwarder configures syslog-ng to listen on a udp port and forward logs it receives to another syslog server
 
 If you want logs both to be written to a file and to be forwarded, you can use the same host and port in each definition.
@@ -35,7 +35,7 @@ Usage
 ### In a cookbook:
     include_recipe "syslog-ng"
     
-    syslog_ng_app application[:name] do
+    syslog_ng_file application[:name] do
       index "02"
       host "127.0.0.1"
       port "514"

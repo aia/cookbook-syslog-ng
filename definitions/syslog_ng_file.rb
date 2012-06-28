@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: syslog-ng
-# Definition:: syslog_ng_app
+# Definition:: syslog_ng_file
 #
 # Copyright 2012, Artem Veremey
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-define :syslog_ng_app, :template => "syslog_ng_app.erb" do
+define :syslog_ng_file, :template => "syslog_ng_file.erb" do
   include_recipe "syslog-ng"
 
   application = {
