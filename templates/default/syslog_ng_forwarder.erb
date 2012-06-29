@@ -4,17 +4,12 @@
 # <%= node[:syslog_ng][:config_dir] %>/conf.d/<%= [@application[:index], @application[:name]].join %>
 #
 
-
-source s_udp_<%= @application[:name] %> {
-  udp (ip(<%= @application[:host] %>) port(<%= @application[:port] %>));
-};
-
 destination d_<%= @application[:destination_protocol] %>_<%= @application[:name] %> {
   <%= @application[:destination_protocol] %>( "<%= @application[:destination_host] %>" port(<%= @application[:destination_port] %>) );
 };
 
 log {
-  source(s_udp_<%= @application[:name] %>);
+  source(s_udp_<%= @application[:source_name] %>);
   destination(d_<%= @application[:destination_protocol] %>_<%= @application[:name] %>);
 };
 

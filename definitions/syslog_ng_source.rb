@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: syslog-ng
-# Definition:: syslog_ng_forwarder
+# Definition:: syslog_ng_file
 #
 # Copyright 2012, Artem Veremey
 #
@@ -17,17 +17,16 @@
 # limitations under the License.
 #
 
-define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
+define :syslog_ng_source, :template => "syslog_ng_source.erb" do
   include_recipe "syslog-ng"
+
 
   application = {
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
-    :source_name => params[:source_name],
-    :destination_host => params[:destination_host],
-    :destination_port => params[:destination_port] || "514",
-    :destination_protocol => params[:destination_protocol] || "udp",
+    :host => params[:host] || "127.0.0.1",
+    :port => params[:port] || "514",
   }
 
   template "#{node[:syslog_ng][:config_dir]}/conf.d/#{application[:index]}#{application[:name]}" do
@@ -48,4 +47,5 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
 
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
+  
 end
