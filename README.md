@@ -6,9 +6,10 @@ The Syslog NG cookbook installs and configures syslog-ng service. There are two 
 * syslog-ng enables syslog-ng but does not affect your current syslog configuration
 * syslog-ng::global disables your existing syslog and configures syslog-ng to handle system logging
 
-There are also three definitions
+There are also four definitions
 
 * syslog_ng_source configures syslog-ng to listen on a udp port
+* syslog_ng_source configures a filter
 * syslog_ng_file configures syslog-ng to write logs it receives to a file
 * syslog_ng_forwarder configures syslog-ng to forward logs it receives to another syslog server
 
@@ -48,9 +49,15 @@ Usage
       log_name "default.log"
     end
 
-    syslog_ng_forwarder "application_foo" do
-      index "04"
+    syslog_ng_filter "warnings" do
+      index  "04"
+      filter "level(warning)"
+    end
+
+    syslog_ng_forwarder "application_foo_warnings" do
+      index "05"
       source_name "source_foo"
+      filter_name "warnings"
       destination_host "example.com"
       destination_port "514"
       destination_protocol "udp"
@@ -78,6 +85,10 @@ limitations under the License.
 
 Changes
 =======
+
+### v 1.3.0
+
+* Create filter definition and have file and forwarder optionally take a filter
 
 ### v 1.2.0
 

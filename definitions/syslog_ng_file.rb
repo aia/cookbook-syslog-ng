@@ -31,6 +31,11 @@ define :syslog_ng_file, :template => "syslog_ng_file.erb" do
     :log_name => params[:log_name] || "default.log",
   }
 
+  # filter_name is optional
+  if params[:filter_name]
+    application[:filter_name] = params[:filter_name]
+  end 
+
   directory "#{application[:log_base]}" do
     owner node[:syslog_ng][:user]
     group node[:syslog_ng][:group]
