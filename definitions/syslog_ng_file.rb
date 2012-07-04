@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: syslog-ng
-# Definition:: syslog_ng_forwarder
+# Definition:: syslog_ng_file
 #
 # Copyright 2012, Artem Veremey
 #
@@ -17,22 +17,37 @@
 # limitations under the License.
 #
 
-define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
+define :syslog_ng_file, :template => "syslog_ng_file.erb" do
   include_recipe "syslog-ng"
+
 
   application = {
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
     :source_name => params[:source_name],
-    :destination_host => params[:destination_host],
-    :destination_port => params[:destination_port] || "514",
-    :destination_protocol => params[:destination_protocol] || "udp",
+    :days_uncompressed => params[:days_uncompressed] || 1,
+    :log_base => params[:log_base] || node[:syslog_ng][:log_dir],
+    :log_name => params[:log_name] || "default.log",
   }
 
   # filter_name is optional
   if params[:filter_name]
     application[:filter_name] = params[:filter_name]
+  end 
+
+  directory "#{application[:log_base]}" do
+    owner node[:syslog_ng][:user]
+    group node[:syslog_ng][:group]
+    mode 00755
+    action :create
+  end
+
+  directory "#{application[:log_base]}/#{application[:name]}" do
+    owner node[:syslog_ng][:user]
+    group node[:syslog_ng][:group]
+    mode 00755
+    action :create
   end
 
   template "#{node[:syslog_ng][:config_dir]}/conf.d/#{application[:index]}#{application[:name]}" do
@@ -53,4 +68,14 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
 
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
+  
+  template "/etc/cron.daily/#{application[:name]}_compress_logs" do
+    source "compress_logs.erb"
+    cookbook application[:cookbook]
+    mode 0755
+    owner "root"
+    group "root"
+    variables( :application => application )
+  end
+
 end

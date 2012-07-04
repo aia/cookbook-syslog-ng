@@ -4,15 +4,8 @@
 # <%= node[:syslog_ng][:config_dir] %>/conf.d/<%= [@application[:index], @application[:name]].join %>
 #
 
-
 source s_udp_<%= @application[:name] %> {
   udp (ip(<%= @application[:host] %>) port(<%= @application[:port] %>));
 };
-
-destination d_file_<%= @application[:name] %> {
-  <%=@application[:destination_type]%>("<%= @application[:log_base] %>/<%= @application[:name] %>/default.log" template(t_network));
-};
-
-log { source(s_udp_<%= @application[:name] %>); filter(f_notdbg); destination(d_file_<%= @application[:name] %>); };
 
 # do not forget the empty line

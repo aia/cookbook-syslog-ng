@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: syslog-ng
-# Definition:: syslog_ng_app
+# Definition:: syslog_ng_file
 #
 # Copyright 2012, Artem Veremey
 #
@@ -17,8 +17,9 @@
 # limitations under the License.
 #
 
-define :syslog_ng_app, :template => "syslog_ng_app.erb" do
+define :syslog_ng_source, :template => "syslog_ng_source.erb" do
   include_recipe "syslog-ng"
+
 
   application = {
     :name => params[:name],
@@ -26,22 +27,7 @@ define :syslog_ng_app, :template => "syslog_ng_app.erb" do
     :cookbook => params[:cookbook] || "syslog-ng",
     :host => params[:host] || "127.0.0.1",
     :port => params[:port] || "514",
-    :log_base => params[:log_base] || node[:syslog_ng][:log_dir]
   }
-
-  directory "#{application[:log_base]}" do
-    owner node[:syslog_ng][:user]
-    group node[:syslog_ng][:group]
-    mode 00755
-    action :create
-  end
-
-  directory "#{application[:log_base]}/#{application[:name]}" do
-    owner node[:syslog_ng][:user]
-    group node[:syslog_ng][:group]
-    mode 00755
-    action :create
-  end
 
   template "#{node[:syslog_ng][:config_dir]}/conf.d/#{application[:index]}#{application[:name]}" do
     source params[:template]
@@ -61,4 +47,5 @@ define :syslog_ng_app, :template => "syslog_ng_app.erb" do
 
     notifies :restart, resources(:service => "syslog-ng"), :immediately
   end
+  
 end

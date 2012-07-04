@@ -1,0 +1,124 @@
+source s_sys {
+  file ("/proc/kmsg" log_prefix("kernel: "));
+  unix-stream ("/dev/log");
+  internal();
+};
+
+# TCP source example
+# source s_tcp {
+# tcp(ip(0.0.0.0) port(2000) max-connections(300));
+# };
+
+# UDP source exaple
+# source s_udp {
+# udp(ip(127.0.0.1) port(514));
+# };
+
+# Forwarding template
+template t_network {
+  template("$R_ISODATE $HOST $SOURCEIP $FACILITY $LEVEL $MSG\n"); template_escape(no);
+};
+
+# Vanilla template
+template t_message {
+  template("$MSG\n"); template_escape(no);
+};
+
+# System logging
+destination d_cons { file("/dev/console"); };
+destination d_mesg { file("/var/log/messages"); };
+destination d_auth { file("/var/log/secure"); };
+destination d_mail { file("/var/log/maillog" sync(10)); };
+destination d_spol { file("/var/log/spooler"); };
+destination d_boot { file("/var/log/boot.log"); };
+destination d_cron { file("/var/log/cron"); };
+destination d_kern { file("/var/log/kern"); };
+destination d_mlal { usertty("*"); };
+
+# Log to MySQL example
+# destination d_mysql {
+# sql(
+# type(mysql)
+# host("localhost") username("syslog") password("sys1100g")
+# database("syslog")
+# table("logs")
+# table("messages_${HOST}_${R_YEAR}${R_MONTH}")
+# columns("datetime", "host", "ip", "facility", "priority", "message")
+# values("$R_ISODATE", "$HOST", "$SOURCEIP", "$FACILITY", "$LEVEL", "$MSG")
+# indexes()
+# );
+# };
+
+filter f_kernel {
+  facility(kern);
+};
+
+filter f_default {
+  level(info..emerg) and
+  not (facility(mail)
+  or facility(authpriv)
+  or facility(cron));
+};
+
+filter f_auth {
+  facility(authpriv);
+};
+
+filter f_mail {
+  facility(mail);
+};
+
+filter f_emergency {
+  level(emerg);
+};
+
+filter f_news {
+  facility(uucp) or
+  (facility(news) and level(crit..emerg));
+};
+
+filter f_boot {
+  facility(local7);
+};
+
+filter f_cron {
+  facility(cron);
+};
+
+filter f_dbg {
+  level(debug);
+};
+
+filter f_notdbg {
+  not (level(debug));
+};
+
+# A more complex filter example
+# filter f_macchange {
+# not (
+# facility(local6) and
+# match("ARPMGR-2-MAC_CHANGE")
+# )
+# and not (
+# facility(local4) and
+# match("sntp_client")
+# )
+# and not (
+# level(debug)
+# );
+# };
+
+
+# Bind sources filters and destinations
+log { source(s_sys); filter(f_kernel); destination(d_cons); };
+log { source(s_sys); filter(f_kernel); destination(d_kern); };
+log { source(s_sys); filter(f_default); destination(d_mesg); };
+log { source(s_sys); filter(f_auth); destination(d_auth); };
+log { source(s_sys); filter(f_mail); destination(d_mail); };
+log { source(s_sys); filter(f_emergency); destination(d_mlal); };
+log { source(s_sys); filter(f_news); destination(d_spol); };
+log { source(s_sys); filter(f_boot); destination(d_boot); };
+log { source(s_sys); filter(f_cron); destination(d_cron); };
+
+# Remember to add an empty line at the end of file
+

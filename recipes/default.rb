@@ -51,14 +51,6 @@ directory "#{node[:syslog_ng][:log_dir]}" do
   action :create
 end
 
-service "syslog" do
-  action [ :disable, :stop ]
-end
-
-service "rsyslog" do
-  action [ :disable, :stop ]
-end
-
 service "syslog-ng" do
   supports :restart => true, :status => true
   action [ :enable, :start ]
