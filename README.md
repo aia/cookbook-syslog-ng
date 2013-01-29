@@ -9,7 +9,7 @@ The Syslog NG cookbook installs and configures syslog-ng service. There are two 
 There are also four definitions
 
 * syslog_ng_source configures syslog-ng to listen on a udp port
-* syslog_ng_source configures a filter
+* syslog_ng_filter configures a filter
 * syslog_ng_file configures syslog-ng to write logs it receives to a file
 * syslog_ng_forwarder configures syslog-ng to forward logs it receives to another syslog server
 
