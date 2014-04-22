@@ -1,3 +1,4 @@
+name             'syslog-ng'
 maintainer       "Artem Veremey"
 maintainer_email "artem@veremey.net"
 license          "Apache 2.0"
