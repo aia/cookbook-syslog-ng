@@ -16,6 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Workaround for currently broken syslog-ng metapackage or some apt bug
+# The problem is that the metapacke will not install the syslog-ng-core
+# dependency for some reason
+if node[:platform] == 'ubuntu' && node[:platform_version] == '14.04'
+  package 'syslog-ng-core'
+end
 
 package "syslog-ng"
 
