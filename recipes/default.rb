@@ -38,6 +38,18 @@ directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   action :create
 end
 
+directory "#{node[:syslog_ng][:log_dir]}" do
+  owner node[:syslog_ng][:user]
+  group node[:syslog_ng][:group]
+  mode 00755
+  action :create
+end
+
+service "syslog-ng" do
+  supports :restart => true, :status => true
+  action [ :enable, :start ]
+end
+
 template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
   source "00base.erb"
   owner node[:syslog_ng][:user]
@@ -56,16 +68,4 @@ template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
     :global_opts => node[:syslog_ng][:global_opts]
   )
   notifies :restart, "service[:syslog-ng]"
-end
-
-directory "#{node[:syslog_ng][:log_dir]}" do
-  owner node[:syslog_ng][:user]
-  group node[:syslog_ng][:group]
-  mode 00755
-  action :create
-end
-
-service "syslog-ng" do
-  supports :restart => true, :status => true
-  action [ :enable, :start ]
 end
