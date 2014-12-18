@@ -16,14 +16,18 @@
 #
 
 options {
-  sync (0);
-  time_reopen (10);
-  log_fifo_size (1000);
-  long_hostnames (off);
-  use_dns (no);
-  use_fqdn (no);
-  create_dirs (yes);
-  keep_hostname (yes);
+  sync (<%=@sync%>);
+  time_reopen (<%=@time_reopen%>);
+  log_fifo_size (<%=@log_fifo_size%>);
+  long_hostnames (<%=@long_hostnames%>);
+  use_dns (<%=@use_dns%>);
+  use_fqdn (<%=@use_fqdn%>);
+  create_dirs (<%=@create_dirs%>);
+  keep_hostname (<%=@keep_hostname%>);
+  chain_hostnames (<%=@chain_hostnames%>);
+  <% @global_opts.each do |k,v| -%>
+  <%=k%> (<%=v%>);
+  <% end -%>
 };
 
 # Remember to add an empty line at the end of file

@@ -38,10 +38,23 @@ directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   action :create
 end
 
-cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+  source "00base.erb"
   owner node[:syslog_ng][:user]
   group node[:syslog_ng][:group]
   mode 00640
+  variables(
+    :sync => node[:syslog_ng][:sync],
+    :time_reopen => node[:syslog_ng][:time_reopen],
+    :log_fifo_size => node[:syslog_ng][:log_fifo_size],
+    :long_hostnames => node[:syslog_ng][:long_hostnames],
+    :use_dns => node[:syslog_ng][:use_dns],
+    :use_fqdn => node[:syslog_ng][:use_fqdn],
+    :create_dirs => node[:syslog_ng][:create_dirs],
+    :keep_hostname => node[:syslog_ng][:keep_hostname],
+    :chain_hostnames => node[:syslog_ng][:chain_hostnames]
+    :global_opts => node[:syslog_ng][:global_opts]
+  )
 end
 
 directory "#{node[:syslog_ng][:log_dir]}" do
