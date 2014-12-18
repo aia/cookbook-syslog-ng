@@ -52,7 +52,7 @@ template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
     :use_fqdn => node[:syslog_ng][:use_fqdn],
     :create_dirs => node[:syslog_ng][:create_dirs],
     :keep_hostname => node[:syslog_ng][:keep_hostname],
-    :chain_hostnames => node[:syslog_ng][:chain_hostnames]
+    :chain_hostnames => node[:syslog_ng][:chain_hostnames],
     :global_opts => node[:syslog_ng][:global_opts]
   )
 end
