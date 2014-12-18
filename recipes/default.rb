@@ -16,12 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Workaround for currently broken syslog-ng metapackage or some apt bug
-# The problem is that the metapacke will not install the syslog-ng-core
-# dependency for some reason
-if node[:platform] == 'ubuntu' && node[:platform_version] == '14.04'
-  package 'syslog-ng-core'
-end
 
 package "syslog-ng"
 
@@ -44,14 +38,10 @@ directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   action :create
 end
 
-if !platform?("ubuntu")
-
-  cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
-    owner node[:syslog_ng][:user]
-    group node[:syslog_ng][:group]
-    mode 00640
-  end
-
+cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+  owner node[:syslog_ng][:user]
+  group node[:syslog_ng][:group]
+  mode 00640
 end
 
 directory "#{node[:syslog_ng][:log_dir]}" do
