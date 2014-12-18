@@ -67,5 +67,5 @@ template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
     :chain_hostnames => node[:syslog_ng][:chain_hostnames],
     :global_opts => node[:syslog_ng][:global_opts]
   )
-  notifies :restart, "service[:syslog-ng]"
+  notifies :restart, "service[syslog-ng]"
 end
