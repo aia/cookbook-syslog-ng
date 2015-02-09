@@ -23,6 +23,7 @@ define :syslog_ng_source, :template => "syslog_ng_source.erb" do
 
   application = {
     :name => params[:name],
+    :source_prefix => params[:source_prefix] || node[:syslog_ng][:source_prefix],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
     :host => params[:host] || "127.0.0.1",

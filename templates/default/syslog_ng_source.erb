@@ -4,7 +4,7 @@
 # <%= node[:syslog_ng][:config_dir] %>/conf.d/<%= [@application[:index], @application[:name]].join %>
 #
 
-source s_udp_<%= @application[:name] %> {
+source <%= @application[:source_prefix] %><%= @application[:name] %> {
   udp (ip(<%= @application[:host] %>) port(<%= @application[:port] %>));
 };
 

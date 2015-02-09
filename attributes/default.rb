@@ -12,3 +12,4 @@ default[:syslog_ng][:create_dirs]     = 'yes'
 default[:syslog_ng][:keep_hostname]   = 'yes'
 default[:syslog_ng][:chain_hostnames] = 'yes'
 default[:syslog_ng][:global_opts] = []
+default[:syslog_ng][:source_prefix] = 's_udp_'

@@ -9,7 +9,7 @@ destination d_file_<%= @application[:name] %> {
 };
 
 log {
-  source(s_udp_<%= @application[:source_name] %>);
+  source(<%= @application[:source_prefix] %><%= @application[:source_name] %>);
   <% if @application[:filter_name] -%>
     filter(f_<%= @application[:filter_name] %>);
   <% end -%>
