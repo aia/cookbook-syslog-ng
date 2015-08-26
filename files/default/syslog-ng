@@ -16,11 +16,31 @@
 # *****
 
 # Source function library.
-. /etc/init.d/functions
+if [ -x /etc/init.d/functions ]; then
+  . /etc/init.d/functions
+else
+  . /lib/lsb/init-functions
+fi
 
 binary="/sbin/syslog-ng"
+if [ ! -x "${binary}" ]; then
+  binary="/usr/sbin/syslog-ng"
+fi
 
-[ -x $binary ] || exit 0
+if [ -d /var/lock/subsys ]; then
+  lockfile=/var/lock/subsys/syslog-ng
+else
+  lockfile=/var/lib/syslog-ng/syslog-ng.pid
+fi
+
+echo 'binary:' "${binary}"
+echo 'lockfile:' "${lockfile}"
+echo 'Command:' "${1}"
+
+if [ ! -x "${binary}" ]; then
+  echo 'Cannot find syslog-ng in' "${binary}"
+  exit 0
+fi
 
 RETVAL=0
 
@@ -30,7 +50,7 @@ start() {
   daemon $binary
   RETVAL=$?
   echo
-  [ $RETVAL -eq 0 ] && touch /var/lock/subsys/syslog-ng
+  [ $RETVAL -eq 0 ] && touch "${lockfile}"
 }
 
 stop() {
@@ -39,8 +59,8 @@ stop() {
   RETVAL=$?
   echo
   if [ $RETVAL -eq 0 ]; then
-    rm -f /var/lock/subsys/syslog-ng
-    rm -f /var/run/syslog-ng.pid
+    rm -f "${lockfile}"
+    [ -f /var/run/syslog-ng.pid ] && rm -f /var/run/syslog-ng.pid
   fi
 }
 
@@ -84,7 +104,7 @@ case "$1" in
     reload
     ;;
   condrestart)
-    [ -f /var/lock/subsys/syslog-ng ] && restart
+    [ -f "${lockfile}" ] && restart
     ;;
   *)
     echo "Usage: $0 {start|stop|status|restart|reload|condrestart}"
