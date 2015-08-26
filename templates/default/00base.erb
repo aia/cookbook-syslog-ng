@@ -1,0 +1,33 @@
+# This file is managed by Chef
+# Local changes will be overwritten
+#
+#  === Caution ===
+# syslog-ng.conf file will be overwritten based on conf.d files
+# Make changes to conf.d files only
+# 
+# /etc/syslog-ng/conf.d/00base
+#
+# syslog-ng  base configuration file.
+#
+# This should behave pretty much like the original syslog on RedHat. But
+# it could be configured a lot smarter.
+#
+# See syslog-ng(8) and syslog-ng.conf(5) for more information.
+#
+
+options {
+  flush_lines (<%=@flush_lines%>);
+  time_reopen (<%=@time_reopen%>);
+  log_fifo_size (<%=@log_fifo_size%>);
+  chain_hostnames (<%=@chain_hostnames%>);
+  use_dns (<%=@use_dns%>);
+  use_fqdn (<%=@use_fqdn%>);
+  create_dirs (<%=@create_dirs%>);
+  keep_hostname (<%=@keep_hostname%>);
+  chain_hostnames (<%=@chain_hostnames%>);
+  <% @global_opts.each do |k,v| -%>
+  <%=k%> (<%=v%>);
+  <% end -%>
+};
+
+# Remember to add an empty line at the end of file
